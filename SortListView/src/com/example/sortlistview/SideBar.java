@@ -12,12 +12,13 @@ import android.view.View;
 import android.widget.TextView;
 
 public class SideBar extends View {
-	// è§¦æ‘¸äº‹ä»¶
+	// ´¥ÃşÊÂ¼ş
 	private OnTouchingLetterChangedListener onTouchingLetterChangedListener;
-	// 26ä¸ªå­—æ¯
-	public static String[] b = { "æ±½è½¦", "ç å®", "æ—…æ¸¸",  "æœè£…", "äººç‰©", "ç®±åŒ…", "åŒ–å¦†å“",
-		"é’Ÿè¡¨", "å®¶å±…", "é›†é”¦", "ä¸“é¢˜", "#" };
-	private int choose = -1;// é€‰ä¸­
+	// 26¸ö×ÖÄ¸
+	public static String[] b = { "A", "B", "C", "D", "E", "F", "G", "H", "I",
+			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V",
+			"W", "X", "Y", "Z", "#" };
+	private int choose = -1;// Ñ¡ÖĞ
 	private Paint paint = new Paint();
 
 	private TextView mTextDialog;
@@ -40,14 +41,14 @@ public class SideBar extends View {
 	}
 
 	/**
-	 * é‡å†™è¿™ä¸ªæ–¹æ³•
+	 * ÖØĞ´Õâ¸ö·½·¨
 	 */
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		// è·å–ç„¦ç‚¹æ”¹å˜èƒŒæ™¯é¢œè‰².
-		int height = getHeight();// è·å–å¯¹åº”é«˜åº¦
-		int width = getWidth(); // è·å–å¯¹åº”å®½åº¦
-		int singleHeight = height / b.length;// è·å–æ¯ä¸€ä¸ªå­—æ¯çš„é«˜åº¦
+		// »ñÈ¡½¹µã¸Ä±ä±³¾°ÑÕÉ«.
+		int height = getHeight();// »ñÈ¡¶ÔÓ¦¸ß¶È
+		int width = getWidth(); // »ñÈ¡¶ÔÓ¦¿í¶È
+		int singleHeight = height / b.length;// »ñÈ¡Ã¿Ò»¸ö×ÖÄ¸µÄ¸ß¶È
 
 		for (int i = 0; i < b.length; i++) {
 			paint.setColor(Color.rgb(33, 65, 98));
@@ -55,16 +56,16 @@ public class SideBar extends View {
 			paint.setTypeface(Typeface.DEFAULT_BOLD);
 			paint.setAntiAlias(true);
 			paint.setTextSize(20);
-			// é€‰ä¸­çš„çŠ¶æ€
+			// Ñ¡ÖĞµÄ×´Ì¬
 			if (i == choose) {
 				paint.setColor(Color.parseColor("#3399ff"));
 				paint.setFakeBoldText(true);
 			}
-			// xåæ ‡ç­‰äºä¸­é—´-å­—ç¬¦ä¸²å®½åº¦çš„ä¸€åŠ.
+			// x×ø±êµÈÓÚÖĞ¼ä-×Ö·û´®¿í¶ÈµÄÒ»°ë.
 			float xPos = width / 2 - paint.measureText(b[i]) / 2;
 			float yPos = singleHeight * i + singleHeight;
 			canvas.drawText(b[i], xPos, yPos, paint);
-			paint.reset();// é‡ç½®ç”»ç¬”
+			paint.reset();// ÖØÖÃ»­±Ê
 		}
 
 	}
@@ -72,10 +73,10 @@ public class SideBar extends View {
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
 		final int action = event.getAction();
-		final float y = event.getY();// ç‚¹å‡»yåæ ‡
+		final float y = event.getY();// µã»÷y×ø±ê
 		final int oldChoose = choose;
 		final OnTouchingLetterChangedListener listener = onTouchingLetterChangedListener;
-		final int c = (int) (y / getHeight() * b.length);// ç‚¹å‡»yåæ ‡æ‰€å æ€»é«˜åº¦çš„æ¯”ä¾‹*bæ•°ç»„çš„é•¿åº¦å°±ç­‰äºç‚¹å‡»bä¸­çš„ä¸ªæ•°.
+		final int c = (int) (y / getHeight() * b.length);// µã»÷y×ø±êËùÕ¼×Ü¸ß¶ÈµÄ±ÈÀı*bÊı×éµÄ³¤¶È¾ÍµÈÓÚµã»÷bÖĞµÄ¸öÊı.
 
 		switch (action) {
 		case MotionEvent.ACTION_UP:
@@ -110,7 +111,7 @@ public class SideBar extends View {
 	}
 
 	/**
-	 * å‘å¤–å…¬å¼€çš„æ–¹æ³•
+	 * ÏòÍâ¹«¿ªµÄ·½·¨
 	 * 
 	 * @param onTouchingLetterChangedListener
 	 */
@@ -120,7 +121,7 @@ public class SideBar extends View {
 	}
 
 	/**
-	 * æ¥å£
+	 * ½Ó¿Ú
 	 * 
 	 * @author coder
 	 * 

@@ -1,13 +1,13 @@
 /*
  * Filename	CharacterParser.java
- * Company	ä¸Šæµ·ä¹é—®-æµ¦ä¸œåˆ†å…¬å¸ã€‚
+ * Company	ÉÏº£ÀÖÎÊ-ÆÖ¶«·Ö¹«Ë¾¡£
  * @author	LuRuihui
  * @version	0.1
  */
 package com.example.sortlistview;
 
 /**
- * Javaæ±‰å­—è½¬æ¢ä¸ºæ‹¼éŸ³
+ * Javaºº×Ö×ª»»ÎªÆ´Òô
  * 
  */
 public class CharacterParser {
@@ -73,7 +73,7 @@ public class CharacterParser {
 		this.resource = resource;
 	}
 
-	/** * æ±‰å­—è½¬æˆASCIIç  * * @param chs * @return */
+	/** * ºº×Ö×ª³ÉASCIIÂë * * @param chs * @return */
 	private int getChsAscii(String chs) {
 		int asc = 0;
 		try {
@@ -95,7 +95,7 @@ public class CharacterParser {
 		return asc;
 	}
 
-	/** * å•å­—è§£æ * * @param str * @return */
+	/** * µ¥×Ö½âÎö * * @param str * @return */
 	public String convert(String str) {
 		String result = null;
 		int ascii = getChsAscii(str);
@@ -112,7 +112,7 @@ public class CharacterParser {
 		return result;
 	}
 
-	/** * è¯ç»„è§£æ * * @param chs * @return */
+	/** * ´Ê×é½âÎö * * @param chs * @return */
 	public String getSelling(String chs) {
 		String key, value;
 		buffer = new StringBuilder();

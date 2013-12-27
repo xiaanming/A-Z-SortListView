@@ -20,7 +20,7 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
 	}
 	
 	/**
-	 * å½“ListViewæ•°æ®å‘ç”Ÿå˜åŒ–æ—¶,è°ƒç”¨æ­¤æ–¹æ³•æ¥æ›´æ–°ListView
+	 * µ±ListViewÊı¾İ·¢Éú±ä»¯Ê±,µ÷ÓÃ´Ë·½·¨À´¸üĞÂListView
 	 * @param list
 	 */
 	public void updateListView(List<SortModel> list){
@@ -53,10 +53,10 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
 			viewHolder = (ViewHolder) view.getTag();
 		}
 		
-		//æ ¹æ®positionè·å–åˆ†ç±»çš„é¦–å­—æ¯çš„Char asciiå€¼
+		//¸ù¾İposition»ñÈ¡·ÖÀàµÄÊ××ÖÄ¸µÄChar asciiÖµ
 		int section = getSectionForPosition(position);
 		
-		//å¦‚æœå½“å‰ä½ç½®ç­‰äºè¯¥åˆ†ç±»é¦–å­—æ¯çš„Charçš„ä½ç½® ï¼Œåˆ™è®¤ä¸ºæ˜¯ç¬¬ä¸€æ¬¡å‡ºç°
+		//Èç¹ûµ±Ç°Î»ÖÃµÈÓÚ¸Ã·ÖÀàÊ××ÖÄ¸µÄCharµÄÎ»ÖÃ £¬ÔòÈÏÎªÊÇµÚÒ»´Î³öÏÖ
 		if(position == getPositionForSection(section)){
 			viewHolder.tvLetter.setVisibility(View.VISIBLE);
 			viewHolder.tvLetter.setText(mContent.getSortLetters());
@@ -79,14 +79,14 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
 
 
 	/**
-	 * æ ¹æ®ListViewçš„å½“å‰ä½ç½®è·å–åˆ†ç±»çš„é¦–å­—æ¯çš„Char asciiå€¼
+	 * ¸ù¾İListViewµÄµ±Ç°Î»ÖÃ»ñÈ¡·ÖÀàµÄÊ××ÖÄ¸µÄChar asciiÖµ
 	 */
 	public int getSectionForPosition(int position) {
 		return list.get(position).getSortLetters().charAt(0);
 	}
 
 	/**
-	 * æ ¹æ®åˆ†ç±»çš„é¦–å­—æ¯çš„Char asciiå€¼è·å–å…¶ç¬¬ä¸€æ¬¡å‡ºç°è¯¥é¦–å­—æ¯çš„ä½ç½®
+	 * ¸ù¾İ·ÖÀàµÄÊ××ÖÄ¸µÄChar asciiÖµ»ñÈ¡ÆäµÚÒ»´Î³öÏÖ¸ÃÊ××ÖÄ¸µÄÎ»ÖÃ
 	 */
 	public int getPositionForSection(int section) {
 		for (int i = 0; i < getCount(); i++) {
@@ -101,14 +101,14 @@ public class SortAdapter extends BaseAdapter implements SectionIndexer{
 	}
 	
 	/**
-	 * æå–è‹±æ–‡çš„é¦–å­—æ¯ï¼Œéè‹±æ–‡å­—æ¯ç”¨#ä»£æ›¿ã€‚
+	 * ÌáÈ¡Ó¢ÎÄµÄÊ××ÖÄ¸£¬·ÇÓ¢ÎÄ×ÖÄ¸ÓÃ#´úÌæ¡£
 	 * 
 	 * @param str
 	 * @return
 	 */
 	private String getAlpha(String str) {
 		String  sortStr = str.trim().substring(0, 1).toUpperCase();
-		// æ­£åˆ™è¡¨è¾¾å¼ï¼Œåˆ¤æ–­é¦–å­—æ¯æ˜¯å¦æ˜¯è‹±æ–‡å­—æ¯
+		// ÕıÔò±í´ïÊ½£¬ÅĞ¶ÏÊ××ÖÄ¸ÊÇ·ñÊÇÓ¢ÎÄ×ÖÄ¸
 		if (sortStr.matches("[A-Z]")) {
 			return sortStr;
 		} else {

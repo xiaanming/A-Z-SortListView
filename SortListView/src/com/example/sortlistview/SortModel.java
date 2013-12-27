@@ -2,8 +2,8 @@ package com.example.sortlistview;
 
 public class SortModel {
 
-	private String name;   //æ˜¾ç¤ºçš„æ•°æ®
-	private String sortLetters;  //æ˜¾ç¤ºæ•°æ®æ‹¼éŸ³çš„é¦–å­—æ¯
+	private String name;   //ÏÔÊ¾µÄÊı¾İ
+	private String sortLetters;  //ÏÔÊ¾Êı¾İÆ´ÒôµÄÊ××ÖÄ¸
 	
 	public String getName() {
 		return name;

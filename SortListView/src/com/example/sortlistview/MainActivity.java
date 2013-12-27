@@ -1,27 +1,11 @@
 package com.example.sortlistview;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -42,126 +26,25 @@ public class MainActivity extends Activity {
 	private ClearEditText mClearEditText;
 	
 	/**
-	 * æ±‰å­—è½¬æ¢æˆæ‹¼éŸ³çš„ç±»
+	 * ºº×Ö×ª»»³ÉÆ´ÒôµÄÀà
 	 */
 	private CharacterParser characterParser;
 	private List<SortModel> SourceDateList;
 	
 	/**
-	 * æ ¹æ®æ‹¼éŸ³æ¥æ’åˆ—ListViewé‡Œé¢çš„æ•°æ®ç±»
+	 * ¸ù¾İÆ´ÒôÀ´ÅÅÁĞListViewÀïÃæµÄÊı¾İÀà
 	 */
 	private PinyinComparator pinyinComparator;
-	
-	private ProgressDialog mProgressDialog;
-	
-	
-	private static final String PATH = "http://220.231.15.134/searchLeftMenuPad.jsp?word=æ±½è½¦";
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initViews();
 	}
-	
-	private Handler mHandler = new Handler(){  
-
-		@Override
-		public void handleMessage(Message msg) {
-			super.handleMessage(msg);
-			//å…³é—­è¿›åº¦æ¡
-			mProgressDialog.dismiss();
-			if((String)msg.obj == null){
-				Toast.makeText(MainActivity.this, "è·å–æ•°æ®å¤±è´¥", Toast.LENGTH_SHORT).show();
-				return;
-			}
-			
-			String result = (String) msg.obj;
-			try {
-				SourceDateList = filledData(getCuntryData(result));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			// æ ¹æ®a-zè¿›è¡Œæ’åºæºæ•°æ®
-			Collections.sort(SourceDateList, pinyinComparator);
-			adapter = new SortAdapter(MainActivity.this, SourceDateList);
-			sortListView.setAdapter(adapter);
-			
-			
-		}
-		
-	};
-	
-	
-	/***********
-	 * 
-	 * @param result
-	 * @returnè¿™ä¸ªåœ°æ–¹çš„è§£æå¾ˆæœ‰å¿…è¦çœ‹ä¸€ä¸‹
-	 * @throws JSONException
-	 */
-	private List<SortModel> getCuntryData(String result) throws JSONException{
-		if(result == null){
-			return null;
-		}
-		
-		JSONObject json = new JSONObject(result);
-		List<SortModel> list = new ArrayList<SortModel>();
-		for(Iterator<String> it = json.keys(); it.hasNext();){
-			String str = it.next();
-			JSONArray jsonArray = json.optJSONArray(str);
-			for(int i=0; i<jsonArray.length(); i++){
-				JSONObject jsonObject = jsonArray.optJSONObject(i);
-				SortModel sortModel = new SortModel();
-				if("æ±½è½¦".equals(str)){
-					sortModel.setName(jsonObject.optString("Brand"));
-					sortModel.setSortLetters(jsonObject.optString("Category"));
-				}
-				
-				
-				list.add(sortModel);
-			}
-			
-		}
-		
-		
-		return list;
-		
-	}
-
 
 	private void initViews() {
-		showProgressDialog();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				HttpClient httpClient=new DefaultHttpClient();
-				HttpGet httpGet = new HttpGet(PATH);
-				String result = null;
-				try {
-					HttpResponse httpResponse = httpClient.execute(httpGet);
-					if(httpResponse.getStatusLine().getStatusCode() == 200){
-						result = responseHandler(httpResponse, "UTF-8");
-						
-						System.out.println(result);
-					}
-				}  catch (IOException e) {
-					e.printStackTrace();
-					
-				} finally{
-					httpGet.abort();
-					
-					//å°†ç½‘ç»œæ•°æ®å‘é€ç»™Handler
-					Message msg = mHandler.obtainMessage();
-					msg.obj = result;
-					mHandler.sendMessage(msg);
-				}
-			}
-		}).start();
-		
-		
-		//å®ä¾‹åŒ–æ±‰å­—è½¬æ‹¼éŸ³ç±»
+		//ÊµÀı»¯ºº×Ö×ªÆ´ÒôÀà
 		characterParser = CharacterParser.getInstance();
 		
 		pinyinComparator = new PinyinComparator();
@@ -170,12 +53,12 @@ public class MainActivity extends Activity {
 		dialog = (TextView) findViewById(R.id.dialog);
 		sideBar.setTextView(dialog);
 		
-		//è®¾ç½®å³ä¾§è§¦æ‘¸ç›‘å¬
+		//ÉèÖÃÓÒ²à´¥Ãş¼àÌı
 		sideBar.setOnTouchingLetterChangedListener(new OnTouchingLetterChangedListener() {
 			
 			@Override
 			public void onTouchingLetterChanged(String s) {
-				//è¯¥å­—æ¯é¦–æ¬¡å‡ºç°çš„ä½ç½®
+				//¸Ã×ÖÄ¸Ê×´Î³öÏÖµÄÎ»ÖÃ
 				int position = adapter.getPositionForSection(s.charAt(0));
 				if(position != -1){
 					sortListView.setSelection(position);
@@ -190,22 +73,27 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//è¿™é‡Œè¦åˆ©ç”¨adapter.getItem(position)æ¥è·å–å½“å‰positionæ‰€å¯¹åº”çš„å¯¹è±¡
+				//ÕâÀïÒªÀûÓÃadapter.getItem(position)À´»ñÈ¡µ±Ç°positionËù¶ÔÓ¦µÄ¶ÔÏó
 				Toast.makeText(getApplication(), ((SortModel)adapter.getItem(position)).getName(), Toast.LENGTH_SHORT).show();
 			}
 		});
 		
+		SourceDateList = filledData(getResources().getStringArray(R.array.date));
 		
+		// ¸ù¾İa-z½øĞĞÅÅĞòÔ´Êı¾İ
+		Collections.sort(SourceDateList, pinyinComparator);
+		adapter = new SortAdapter(this, SourceDateList);
+		sortListView.setAdapter(adapter);
 		
 		
 		mClearEditText = (ClearEditText) findViewById(R.id.filter_edit);
 		
-		//æ ¹æ®è¾“å…¥æ¡†è¾“å…¥å€¼çš„æ”¹å˜æ¥è¿‡æ»¤æœç´¢
+		//¸ù¾İÊäÈë¿òÊäÈëÖµµÄ¸Ä±äÀ´¹ıÂËËÑË÷
 		mClearEditText.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				//å½“è¾“å…¥æ¡†é‡Œé¢çš„å€¼ä¸ºç©ºï¼Œæ›´æ–°ä¸ºåŸæ¥çš„åˆ—è¡¨ï¼Œå¦åˆ™ä¸ºè¿‡æ»¤æ•°æ®åˆ—è¡¨
+				//µ±ÊäÈë¿òÀïÃæµÄÖµÎª¿Õ£¬¸üĞÂÎªÔ­À´µÄÁĞ±í£¬·ñÔòÎª¹ıÂËÊı¾İÁĞ±í
 				filterData(s.toString());
 			}
 			
@@ -221,46 +109,37 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	/**
-	 * æ˜¾ç¤ºProgressDialog
-	 */
-	private void showProgressDialog(){
-		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setMessage("æ•°æ®åŠ è½½ä¸­...");
-		mProgressDialog.show();
-	}
 
-//	/**
-//	 * ä¸ºListViewå¡«å……æ•°æ®
-//	 * @param date
-//	 * @return
-//	 */
-//	private List<SortModel> filledData(List<so> list){
-//		final List<SortModel> mSortList = new ArrayList<SortModel>();
-//		
-//		for(CountryBean countryBean : list){
-//			SortModel sortModel = new SortModel();
-//			sortModel.setName(countryBean.getBrand());
-//			//æ±‰å­—è½¬æ¢æˆæ‹¼éŸ³
-//			String pinyin = characterParser.getSelling(countryBean.getBrand());
-//			String sortString = pinyin.substring(0, 1).toUpperCase();
-//			
-//			// æ­£åˆ™è¡¨è¾¾å¼ï¼Œåˆ¤æ–­é¦–å­—æ¯æ˜¯å¦æ˜¯è‹±æ–‡å­—æ¯
-//			if(sortString.matches("[A-Z]")){
-//				sortModel.setSortLetters(sortString.toUpperCase());
-//			}else{
-//				sortModel.setSortLetters("#");
-//			}
-//			
-//			mSortList.add(sortModel);
-//		}
-//		
-//		return mSortList;
-//		
-//	}
+	/**
+	 * ÎªListViewÌî³äÊı¾İ
+	 * @param date
+	 * @return
+	 */
+	private List<SortModel> filledData(String [] date){
+		List<SortModel> mSortList = new ArrayList<SortModel>();
+		
+		for(int i=0; i<date.length; i++){
+			SortModel sortModel = new SortModel();
+			sortModel.setName(date[i]);
+			//ºº×Ö×ª»»³ÉÆ´Òô
+			String pinyin = characterParser.getSelling(date[i]);
+			String sortString = pinyin.substring(0, 1).toUpperCase();
+			
+			// ÕıÔò±í´ïÊ½£¬ÅĞ¶ÏÊ××ÖÄ¸ÊÇ·ñÊÇÓ¢ÎÄ×ÖÄ¸
+			if(sortString.matches("[A-Z]")){
+				sortModel.setSortLetters(sortString.toUpperCase());
+			}else{
+				sortModel.setSortLetters("#");
+			}
+			
+			mSortList.add(sortModel);
+		}
+		return mSortList;
+		
+	}
 	
 	/**
-	 * æ ¹æ®è¾“å…¥æ¡†ä¸­çš„å€¼æ¥è¿‡æ»¤æ•°æ®å¹¶æ›´æ–°ListView
+	 * ¸ù¾İÊäÈë¿òÖĞµÄÖµÀ´¹ıÂËÊı¾İ²¢¸üĞÂListView
 	 * @param filterStr
 	 */
 	private void filterData(String filterStr){
@@ -278,44 +157,9 @@ public class MainActivity extends Activity {
 			}
 		}
 		
-		// æ ¹æ®a-zè¿›è¡Œæ’åº
+		// ¸ù¾İa-z½øĞĞÅÅĞò
 		Collections.sort(filterDateList, pinyinComparator);
 		adapter.updateListView(filterDateList);
 	}
 	
-	
-	/**
-	 * å¤„ç†Httpè¯·æ±‚çš„ç»“æœ
-	 * @param response
-	 * @param encoding
-	 * @return
-	 */
-	public String responseHandler(HttpResponse response, String encoding) {
-		StringBuffer sb = new StringBuffer();
-		HttpEntity httpEntity = response.getEntity();
-		BufferedReader br = null;
-		try{
-			br = new BufferedReader(new InputStreamReader(
-					httpEntity.getContent(), encoding));
-			String line = null;
-			while((line = br.readLine()) != null){
-				sb.append(line);
-			}
-			
-			return sb.toString();
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			if(br != null){
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return null;
-
-	}
 }
